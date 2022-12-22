@@ -6,7 +6,7 @@ let gender = document.getElementById("txtGender");
 let form=document.querySelector("form");
 
 function validateInput(){
-    //check username is empty 
+   
     if(userName.value.trim()===""){
        onError(userName,"User Name cannot be empty");
     }else{
@@ -28,7 +28,7 @@ function validateInput(){
 
 
 
-    //password
+    
     if(pwd.value.trim()===""){
         onError(pwd,"Password cannot be empty");
      }else{
