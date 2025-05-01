@@ -1,0 +1,161 @@
+import java.util.*;
+
+public class MultiUserSystem{
+    static class User {
+        String UserName;
+        String password;
+        String role;
+        List<Farmer> farmers;
+
+        User (String UserName, String password , String role){
+            this.UserName = UserName;
+            this.password = password;
+            this.role = role;
+
+            if(role.equals("SCP")){
+               this.farmers = new ArrayList<>();
+            }
+        }
+    }
+
+    static class Farmer {
+        String name;
+        String phone;
+        String village;
+        String croprequired;
+
+        Farmer(String name, String phone,  String village, String croprequired){
+
+        this.name = name;
+        this.phone = phone;
+        this.village = village;
+        this.croprequired = croprequired;
+
+        }
+       
+        public String toString(){
+           return  "Name" + name + "Phone" + phone + "Village" + village + "Crop" + croprequired;
+        }
+
+    }    
+    static Map<String, User> users = new HashMap<>();
+    static Scanner scan = new Scanner(System.in);
+    static User currentadd = null;
+
+    public static void main(String...args){
+        while(true){
+            System.out.println("Multi-User Registration System with Role-Based Access");
+            System.out.println("1.Register you Service Center Partner");
+            System.out.println("2.Login your Service Center Partner");
+            System.out.println("3.Exit");
+            System.out.println("Select option : ");
+            String choice = scan.nextLine();
+
+
+            switch(choice){
+                case "1":
+                RegisterSCP();
+                break;
+
+                case "2":
+                LoginSCP();
+                break;
+
+                case "3":
+                System.out.println("Exit");
+                return;
+                default: 
+                System.out.println("Invalid");
+            }
+        }
+    }
+
+    static void RegisterSCP(){
+
+            System.out.println("Enter Username for SCP");
+            String username = scan.nextLine(); 
+            if (users.containsKey(username)){
+                System.out.println("Username already exist");
+                return;
+            }
+            System.out.println("Enter the password");
+            String password = scan.nextLine();
+            User obj = new User(username, password, "SCP");
+            users.put(username, obj);
+            System.out.println("Registerd Succesfully");
+    }
+
+
+    static void LoginSCP(){
+        System.out.println("Enter the name");
+        String Username = scan.nextLine();
+        System.out.println("Enter the password");
+        String password = scan.nextLine();
+
+        User user = users.get(Username);
+        if(user != null && user.password.equals(password) && user.role.equals("SCP")){
+            currentadd = user;
+            System.out.println("Login succesfull");
+            scpdisplay();
+        } else{
+            System.out.println("Invalid credentials");
+        }
+    }
+
+    static void scpdisplay(){
+        while (true) { 
+            System.out.println("\n Service Center Partner");
+            System.out.println("1.Register Farmer");
+           System.out.println("2.View Registerd farmer");
+            System.out.println("3.Logout");
+            System.out.println("Select an option");
+            String choice = scan.nextLine();
+
+            switch (choice) {
+                case "1": 
+                registerFarmer();
+                break;
+
+                case "2":
+               viewFarmer();
+                break;
+
+                case "3":
+                System.out.println("Logged out");
+                return;
+
+                default:
+                System.out.println("Invalid");
+            }
+        }
+    }
+
+
+    static void registerFarmer(){
+        System.out.print("Enter Farmer Name: ");
+        String name = scan.nextLine();
+        System.out.print("Enter Phone Number: ");
+        String phone = scan.nextLine();
+        System.out.print("Enter Village Name: ");
+        String village = scan.nextLine();
+        System.out.print("Enter Crop Required: ");
+        String croprequired = scan.nextLine();
+        Farmer farm = new Farmer(name, phone, village, croprequired);
+        currentadd.farmers.add(farm);
+        System.out.println("Farmer registered succesfully");
+    }
+
+    static void viewFarmer(){
+        if(currentadd.farmers.isEmpty()){
+            System.out.println("No farmer is registered");
+        }else{
+          for (Farmer farm : currentadd.farmers){
+            System.out.println(farm.name);
+            System.out.println(farm.village);
+            System.out.println(farm.phone);
+            System.out.println(farm.croprequired);
+
+          }
+        }
+    }
+}
